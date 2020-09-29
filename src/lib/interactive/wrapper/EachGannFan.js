@@ -20,6 +20,7 @@ class EachGannFan extends Component {
 		this.handleFanDrag = this.handleFanDrag.bind(this);
 
 		this.handleChannelHeightChange = this.handleChannelHeightChange.bind(this);
+		this.handleDoubleClick = this.handleDoubleClick.bind(this);
 
 		this.handleHover = this.handleHover.bind(this);
 		this.getEdgeCircle = this.getEdgeCircle.bind(this);
@@ -30,8 +31,22 @@ class EachGannFan extends Component {
 
 		this.state = {
 			hover: false,
+			selectionEnabled: false
 		};
 	}
+
+	componentDidMount() {
+		document.addEventListener("dblclick", this.handleDoubleClick);
+	}
+
+	handleDoubleClick() {
+		const { selectionEnabled } = this.state;
+		this.setState({
+			selectionEnabled: !selectionEnabled
+		});
+	}
+
+
 	handleHover(moreProps) {
 		if (this.state.hover !== moreProps.hovering) {
 			this.setState({
@@ -49,8 +64,8 @@ class EachGannFan extends Component {
 		};
 	}
 	handleFanDrag(moreProps) {
-		const { index, onDrag, selectionEnabled } = this.props;
-
+		const { index, onDrag,  } = this.props;
+		const { selectionEnabled } = this.state;
 		if (selectionEnabled) {
 			const {
 				startXY, endXY,
@@ -161,8 +176,8 @@ class EachGannFan extends Component {
 		});
 	}
 	getEdgeCircle({ xy, dragHandler, cursor, fill, edge }) {
-		const { hover } = this.state;
-		const { selected, appearance, selectionEnabled } = this.props;
+		const { hover, selectionEnabled } = this.state;
+		const { selected, appearance } = this.props;
 		const { edgeStroke, edgeStrokeWidth, r } = appearance;
 		const { onDragComplete } = this.props;
 
@@ -182,7 +197,8 @@ class EachGannFan extends Component {
 			onDragComplete={onDragComplete} />;
 	}
 	render() {
-		const { startXY, endXY, selectionEnabled } = this.props;
+		const { startXY, endXY,  } = this.props;
+		const { selectionEnabled } = this.state;
 		const { interactive, appearance  } = this.props;
 		const {
 			edgeFill,
